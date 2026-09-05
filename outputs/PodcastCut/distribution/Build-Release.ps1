@@ -1,5 +1,5 @@
 param(
-    [string]$Version = '0.5.8',
+    [string]$Version = '0.5.9',
     [string]$BaseUrl = 'https://github.com/novaxryzor-spec/podcast-cut/releases/latest/download',
     [string]$OutputDirectory = '',
     [string]$PublisherKeyDirectory = ''
