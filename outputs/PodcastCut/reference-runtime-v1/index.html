@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Premiere Copilot Loader</title>
+
+    <style>
+        html,
+        body {
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #1e1e1e;
+        }
+
+        body {
+            color: #fff;
+            font-family: sans-serif;
+        }
+
+        #app-root,
+        #root,
+        #app-root,
+        #root,
+        #roots,
+        .root,
+        .roots {
+            height: 100% !important;
+            width: 100% !important;
+            max-height: none !important;
+        }
+
+        #loading-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            background: #1e1e1e;
+        }
+
+        .initial-loader {
+            border: 4px solid #333;
+            border-top: 4px solid #00FF9C;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Console Debug */
+        #debug-console {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.9);
+            color: #ff5555;
+            font-family: monospace;
+            font-size: 11px;
+            padding: 10px;
+            z-index: 20000;
+            display: none;
+            border-top: 1px solid red;
+        }
+
+        /* Podcast Cut premium visual layer: cosmetic only, runtime untouched. */
+        :root {
+            --pc-accent: #00f0a0;
+            --pc-accent-soft: rgba(0, 240, 160, .16);
+            --pc-surface: rgba(31, 34, 35, .94);
+        }
+        body {
+            background:
+                radial-gradient(900px 480px at 12% -10%, rgba(0, 240, 160, .11), transparent 62%),
+                radial-gradient(700px 420px at 100% 100%, rgba(61, 112, 255, .10), transparent 65%),
+                #17191a;
+            letter-spacing: .01em;
+        }
+        #app-root { isolation: isolate; }
+        button, select, input, textarea {
+            border-radius: 9px;
+            transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease, background-color .18s ease;
+        }
+        button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 22px rgba(0, 0, 0, .24);
+        }
+        button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
+            outline: 0;
+            border-color: var(--pc-accent) !important;
+            box-shadow: 0 0 0 3px var(--pc-accent-soft), 0 0 18px rgba(0, 240, 160, .12);
+        }
+        .initial-loader {
+            width: 46px;
+            height: 46px;
+            border-width: 3px;
+            border-top-color: var(--pc-accent);
+            box-shadow: 0 0 28px rgba(0, 240, 160, .20);
+        }
+        #loading-screen {
+            background:
+                radial-gradient(circle at center, rgba(0, 240, 160, .08), transparent 38%),
+                #17191a;
+        }
+        .pc-credit {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,.58);
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        .pc-credit::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--pc-accent);
+            box-shadow: 0 0 12px var(--pc-accent);
+        }
+        .pc-credit strong {
+            color: #f4fffb;
+            font-weight: 700;
+            letter-spacing: .04em;
+            background: linear-gradient(100deg, #fff, var(--pc-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        #app-root.pc-premium { color: #f3f7f6; }
+        #app-root.pc-premium button {
+            border: 1px solid rgba(255,255,255,.12);
+            background: linear-gradient(145deg, rgba(48,53,53,.96), rgba(27,30,30,.96));
+            color: #eef5f3;
+        }
+        #app-root.pc-premium button:hover:not(:disabled) {
+            border-color: rgba(0,240,160,.68);
+            background: linear-gradient(145deg, rgba(46,76,68,.98), rgba(26,40,37,.98));
+            box-shadow: 0 8px 26px rgba(0,0,0,.30), 0 0 0 1px rgba(0,240,160,.10) inset;
+        }
+        #app-root.pc-premium button[class*="primary"],
+        #app-root.pc-premium button[class*="Primary"],
+        #app-root.pc-premium [class*="primary"] button {
+            border-color: rgba(0,240,160,.78);
+            background: linear-gradient(110deg, #00d995, #00f0a0 55%, #62ffd0);
+            color: #06251d;
+            font-weight: 700;
+            box-shadow: 0 7px 24px rgba(0,240,160,.20);
+        }
+        #app-root.pc-premium [class*="card"],
+        #app-root.pc-premium [class*="Card"] {
+            border: 1px solid rgba(255,255,255,.12);
+            background: linear-gradient(145deg, rgba(35,40,40,.96), rgba(20,23,23,.98));
+            box-shadow: 0 14px 34px rgba(0,0,0,.20), 0 1px 0 rgba(255,255,255,.04) inset;
+        }
+        #app-root.pc-premium input, #app-root.pc-premium select, #app-root.pc-premium textarea {
+            background: rgba(10,13,13,.70);
+            border-color: rgba(255,255,255,.16);
+            color: #f1f6f4;
+        }
+        #app-root.pc-premium input::placeholder { color: rgba(220,235,231,.48); }
+        #app-root.pc-premium [class*="search"] input,
+        #app-root.pc-premium [class*="Search"] input {
+            background: linear-gradient(90deg, rgba(26,31,31,.96), rgba(18,22,22,.96));
+            border-color: rgba(0,240,160,.26);
+            box-shadow: 0 6px 24px rgba(0,0,0,.16);
+        }
+        #app-root.pc-premium [class*="header"],
+        #app-root.pc-premium [class*="Header"] {
+            border-color: rgba(255,255,255,.10) !important;
+        }
+        #app-root.pc-premium .pc-card-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            width: min(760px, calc(100% - 48px));
+            margin: 26px auto 0;
+        }
+        #app-root.pc-premium .pc-tool-card {
+            min-height: 142px;
+            padding: 20px !important;
+            text-align: left;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+        #app-root.pc-premium .pc-search {
+            width: min(760px, calc(100% - 48px));
+            margin: 20px auto 0;
+        }
+        #app-root.pc-premium .pc-greeting {
+            text-align: center;
+            margin-top: 34px;
+        }
+        @media (max-width: 620px) {
+            #app-root.pc-premium .pc-card-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading-screen">
+        <div class="initial-loader"></div>
+        <p style="margin-top:10px; font-size: 12px; opacity: 0.7;">Loading Copilot...</p>
+    </div>
+
+    <div id="app-root"></div>
+    <div id="debug-console"></div>
+    <script>
+        // Keep the social buttons visible for layout consistency, but disable
+        // their destinations in the Podcast Cut redistribution.
+        (function () {
+            var social = /(?:instagram\.com|youtube\.com|youtu\.be|twitter\.com|x\.com|facebook\.com|discord\.com|tiktok\.com|linkedin\.com)/i;
+            var originalOpen = window.open;
+            window.open = function (url) {
+                if (social.test(String(url || ''))) return null;
+                return originalOpen.apply(window, arguments);
+            };
+            document.addEventListener('click', function (event) {
+                var link = event.target && event.target.closest ? event.target.closest('a') : null;
+                if (link && social.test(link.href || '')) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                }
+            }, true);
+            try {
+                var util = window.__adobe_cep__ && window.__adobe_cep__.util;
+                if (util && typeof util.openURLInDefaultBrowser === 'function') {
+                    var originalCepOpen = util.openURLInDefaultBrowser.bind(util);
+                    util.openURLInDefaultBrowser = function (url) {
+                        if (social.test(String(url || ''))) return;
+                        return originalCepOpen(url);
+                    };
+                }
+            } catch (_) { }
+        }());
+    </script>
+    <script>
+        // Podcast Cut branding on the launcher, without changing the bundled app logic.
+        (function () {
+            function updateBranding() {
+                var root = document.getElementById('app-root');
+                if (root) root.classList.add('pc-premium');
+                var candidates = Array.prototype.slice.call(document.querySelectorAll('button,[role="button"],a'));
+                var cards = candidates.filter(function (el) { return /Podcast|Jump Cut/i.test(el.textContent || ''); });
+                if (cards.length >= 2) {
+                    var grid = cards[0].parentElement;
+                    if (grid && grid.parentElement) grid = grid.parentElement;
+                    if (grid) grid.classList.add('pc-card-grid');
+                    cards.forEach(function (el) { el.classList.add('pc-tool-card'); });
+                }
+                var search = Array.prototype.slice.call(document.querySelectorAll('input')).find(function (el) {
+                    return /outil|search/i.test(el.getAttribute('placeholder') || '');
+                });
+                if (search && search.parentElement) search.parentElement.classList.add('pc-search');
+                Array.prototype.forEach.call(document.querySelectorAll('h1,h2,h3,div'), function (el) {
+                    if (/^Bonjour\s+Podcast$/i.test((el.textContent || '').trim())) el.classList.add('pc-greeting');
+                });
+                var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+                var node;
+                while ((node = walker.nextNode())) {
+                    var value = (node.nodeValue || '').trim();
+                    if (/^Propulsé par/i.test(value)) {
+                        var parent = node.parentElement;
+                        if (parent) parent.innerHTML = '<span class="pc-credit">Created by <strong>thms.mp4</strong></span>';
+                    } else if (/^Bonjour\s+/i.test(value)) {
+                        node.nodeValue = 'Bienvenue dans Podcast Cut';
+                    } else if (/^Tu as gagné/i.test(value)) {
+                        node.nodeValue = 'Votre espace de montage est prêt';
+                    } else if (value === 'Podcast') {
+                        node.nodeValue = 'Montage Podcast';
+                    }
+                }
+            }
+            updateBranding();
+            new MutationObserver(updateBranding).observe(document.documentElement, { childList: true, subtree: true });
+        }());
+    </script>
+    <script type="module" src="./js/main.js"></script>
+
+</body>
+
+</html>

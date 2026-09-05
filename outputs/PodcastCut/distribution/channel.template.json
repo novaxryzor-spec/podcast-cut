@@ -1,0 +1,6 @@
+{
+  "channel": "stable",
+  "manifestUrl": "https://VOTRE-DOMAINE.example/podcastcut/stable/manifest.json",
+  "checkIntervalHours": 6,
+  "allowLocalTesting": false
+}

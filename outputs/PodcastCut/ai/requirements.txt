@@ -1,0 +1,5 @@
+sherpa-onnx==1.13.7
+numpy>=1.26,<3
+soundfile>=0.13,<0.14
+scipy>=1.13,<2
+imageio-ffmpeg==0.6.0

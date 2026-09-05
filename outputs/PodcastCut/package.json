@@ -1,0 +1,6 @@
+{"name":"podcast-cut","version":"0.5.8","private":true,"description":"Extension CEP locale de montage podcast pour Premiere Pro","scripts":{"test":"node tests/run.js && node tests/mixed.js && node tests/timeline.js"},"license":"MIT"}
+
+
+
+
+
