@@ -1,0 +1,9 @@
+INSTALLATION MAC
+
+1. Décompressez le ZIP téléchargé.
+2. Ouvrez le dossier PodcastCut.
+3. Double-cliquez sur Installer-Mac.command.
+4. Si macOS bloque le fichier : clic droit > Ouvrir.
+5. Redémarrez Premiere Pro, puis ouvrez Fenêtre > Extensions > Podcast Cut.
+
+L'installateur copie automatiquement l'extension, active CEP et installe les composants IA localement.
