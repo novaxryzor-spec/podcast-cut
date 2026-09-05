@@ -1,6 +1,6 @@
 param(
     [string]$Version = '0.5.8',
-    [string]$BaseUrl = 'https://VOTRE-DOMAINE.example/podcastcut/stable',
+    [string]$BaseUrl = 'https://github.com/novaxryzor-spec/podcast-cut/releases/latest/download',
     [string]$OutputDirectory = '',
     [string]$PublisherKeyDirectory = ''
 )
@@ -130,6 +130,7 @@ $($fileLines -join "`r`n")
     Write-Host "Flux a publier: $manifestPath, manifest.sig, $packageName"
     Write-Host "Cle privee (ne jamais distribuer): $privateKeyPath"
 } finally { Remove-Item -LiteralPath $work -Recurse -Force -ErrorAction SilentlyContinue }
+
 
 
 

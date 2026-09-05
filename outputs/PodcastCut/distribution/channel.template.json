@@ -1,6 +1,7 @@
 {
   "channel": "stable",
-  "manifestUrl": "https://VOTRE-DOMAINE.example/podcastcut/stable/manifest.json",
+  "manifestUrl": "https://github.com/novaxryzor-spec/podcast-cut/releases/latest/download/manifest.json",
   "checkIntervalHours": 6,
   "allowLocalTesting": false
 }
+
