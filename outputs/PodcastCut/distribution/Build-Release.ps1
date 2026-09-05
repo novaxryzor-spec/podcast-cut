@@ -2,7 +2,10 @@ param(
     [string]$Version = '0.5.9',
     [string]$BaseUrl = 'https://github.com/novaxryzor-spec/podcast-cut/releases/latest/download',
     [string]$OutputDirectory = '',
-    [string]$PublisherKeyDirectory = ''
+    [string]$PublisherKeyDirectory = '',
+    [string]$CodeSigningCertificate = '',
+    [string]$CodeSigningPassword = '',
+    [string]$TimestampUrl = 'http://timestamp.digicert.com'
 )
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
@@ -123,6 +126,19 @@ $($fileLines -join "`r`n")
     $deadline = (Get-Date).AddSeconds(30)
     while (-not (Test-Path -LiteralPath $exePath) -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 250 }
     if (-not (Test-Path -LiteralPath $exePath)) { throw 'IExpress n a pas produit l installateur EXE.' }
+    if ($CodeSigningCertificate) {
+        $signtool = Get-Command signtool.exe -ErrorAction SilentlyContinue
+        if (-not $signtool) { throw 'signtool.exe est requis pour signer l EXE. Installez le Windows SDK.' }
+        $signArgs = @('sign','/fd','SHA256','/tr',$TimestampUrl,'/td','SHA256','/f',$CodeSigningCertificate)
+        if ($CodeSigningPassword) { $signArgs += @('/p',$CodeSigningPassword) }
+        $signArgs += $exePath
+        & $signtool.Source @signArgs
+        if ($LASTEXITCODE -ne 0) { throw 'La signature Authenticode de l EXE a échoué.' }
+        & $signtool.Source verify /pa /all $exePath
+        if ($LASTEXITCODE -ne 0) { throw 'La vérification de la signature Authenticode a échoué.' }
+    } else {
+        Write-Warning 'EXE non signé : Windows affichera « Éditeur inconnu ». Fournissez -CodeSigningCertificate pour une publication commerciale.'
+    }
     $exeHash = (Get-FileHash -LiteralPath $exePath -Algorithm SHA256).Hash.ToLowerInvariant()
     [IO.File]::WriteAllText("$exePath.sha256", "$exeHash  $(Split-Path $exePath -Leaf)`r`n", [Text.Encoding]::ASCII)
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'README-PUBLICATION.md') -Destination (Join-Path $OutputDirectory 'README-PUBLICATION.md') -Force

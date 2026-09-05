@@ -29,6 +29,7 @@ Le programme vérifie la signature RSA du manifeste, le SHA-256 du ZIP, l'identi
 ## Avant une vente publique
 
 - Signer l'EXE avec un certificat Authenticode pour éviter l'avertissement Windows SmartScreen.
+- `Build-Release.ps1 -CodeSigningCertificate "chemin\éditeur.pfx" -CodeSigningPassword "..."` signe l'EXE en SHA-256 avec horodatage RFC 3161. Le certificat doit être délivré par une autorité de certification reconnue ; un certificat auto-signé affichera toujours un avertissement.
 - Remplacer l'identifiant de développement par l'identifiant définitif de distribution.
 - Migrer le panneau CEP vers UXP et produire un `.ccx` si la vente passe par Creative Cloud Marketplace. Dans ce canal, Creative Cloud gère les mises à jour.
 - Ajouter le système de licence et les conditions commerciales. L'installateur actuel ne limite pas le nombre de PC et ne vérifie aucun achat.
