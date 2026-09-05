@@ -1,9 +1,11 @@
 'use strict';
 const fs=require('fs'),path=require('path'),os=require('os'),cp=require('child_process');
+function pythonPath(root){const c=process.platform==='win32'?[path.join(root,'runtime','Scripts','python.exe')]:[path.join(root,'runtime','bin','python3'),path.join(root,'runtime','bin','python')];return c.find(p=>fs.existsSync(p))||c[0];}
+function missingPython(){return process.platform==='darwin'?'Installez le moteur IA avec Installer-Mac.command puis réessayez.':'Lancez Installer-IA.cmd puis réessayez.';}
 function fingerprint(audio,count){const s=fs.statSync(audio);return JSON.stringify([path.resolve(audio),s.size,s.mtimeMs,count]);}
 function detect(audio,count,root,onEvent){
-  const python=path.join(root,'runtime','Scripts','python.exe');
-  if(!fs.existsSync(python))throw Error('Moteur IA absent. Lancez Installer-IA.cmd puis réessayez.');
+  const python=pythonPath(root);
+  if(!fs.existsSync(python))throw Error('Moteur IA absent. '+missingPython());
   const output=fs.mkdtempSync(path.join(os.tmpdir(),'PodcastCut-voices-'));
   const key=fingerprint(audio,count);
   const child=cp.spawn(python,['-u',path.join(__dirname,'ai','diarize.py'),'--audio',audio,'--models',path.join(root,'models'),'--output',output,'--speakers',String(count)],{shell:false,windowsHide:true});
@@ -34,8 +36,8 @@ function detect(audio,count,root,onEvent){
   return {promise,cancel(){cancelled=true;child.kill();}};
 }
 function prepareTimeline(selection,root) {
-  const python=path.join(root,'runtime','Scripts','python.exe');
-  if(!fs.existsSync(python))return Promise.reject(Error('Lancez Installer-IA.cmd pour activer l’analyse de timeline.'));
+  const python=pythonPath(root);
+  if(!fs.existsSync(python))return Promise.reject(Error(missingPython()));
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'PodcastCut-timeline-'));
   const spec=path.join(dir,'selection.json'),audio=path.join(dir,'mix.wav');
   fs.writeFileSync(spec,JSON.stringify(selection),'utf8');
@@ -46,8 +48,8 @@ function prepareTimeline(selection,root) {
   }));
 }
 function alignMic(referenceWav,micFile,root) {
-  const python=path.join(root,'runtime','Scripts','python.exe');
-  if(!fs.existsSync(python))return Promise.reject(Error('Lancez Installer-IA.cmd pour activer l’alignement automatique.'));
+  const python=pythonPath(root);
+  if(!fs.existsSync(python))return Promise.reject(Error(missingPython()));
   return new Promise((resolve,reject)=>cp.execFile(python,['-u',path.join(__dirname,'ai','align.py'),'--reference',referenceWav,'--mic',micFile],{windowsHide:true,timeout:10*60*1000,maxBuffer:1024*1024},(error,stdout,stderr)=>{
     let event=null;
     try{const line=String(stdout||'').trim().split(/\r?\n/).filter(Boolean).pop();if(line)event=JSON.parse(line);}catch(_){}
@@ -58,3 +60,4 @@ function alignMic(referenceWav,micFile,root) {
   }));
 }
 module.exports={detect,fingerprint,prepareTimeline,alignMic};
+

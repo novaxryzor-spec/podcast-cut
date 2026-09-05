@@ -2,6 +2,10 @@
 
 `Build-Release.ps1` fabrique un installateur Windows unique et un flux de mise à jour signé. L'installateur place le panneau dans le profil Windows, enregistre sa désinstallation et lance le vérificateur au démarrage de Windows. Le panneau lance aussi une vérification discrète à son ouverture. Chaque PC vérifie au maximum toutes les six heures.
 
+## Installation macOS
+
+Le ZIP contient aussi `Installer-Mac.command` et `Uninstall-Mac.command`. Sur un Mac, copiez le dossier de l'extension dans `~/Library/Application Support/Adobe/CEP/extensions/fr.podcastcut.panel`, puis double-cliquez sur `Installer-Mac.command`. Le script crée l'environnement Python local et télécharge les modèles IA dans `~/Documents/PodcastCut/AI`. Le chargeur choisit automatiquement l'interface macOS au lancement de Premiere Pro.
+
 ## Première publication
 
 1. Réserver un domaine HTTPS, par exemple `https://updates.votre-domaine.fr/podcastcut/stable`.

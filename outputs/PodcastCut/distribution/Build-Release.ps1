@@ -39,7 +39,7 @@ try {
     $payloadParent = Join-Path $work 'payload'
     $payloadRoot = Join-Path $payloadParent 'PodcastCut'
     New-Item -ItemType Directory -Path $payloadRoot -Force | Out-Null
-    $runtimeEntries = @('CSXS','ai','index.html','index-v2.html','style.css','mixed.css','panel.js','core.js','mixed.js','timeline.js','ai-client.js','updater-client.js','host.jsx','package.json','LICENSE','LISEZ-MOI.md','reference-runtime-v1')
+    $runtimeEntries = @('CSXS','ai','index.html','index-v2.html','platform-loader.html','Installer-Mac.command','Uninstall-Mac.command','style.css','mixed.css','panel.js','core.js','mixed.js','timeline.js','ai-client.js','updater-client.js','host.jsx','package.json','LICENSE','LISEZ-MOI.md','reference-runtime-v1')
     foreach ($entry in $runtimeEntries) {
         $source = Join-Path $pluginRoot $entry
         if (Test-Path -LiteralPath $source) { Copy-Item -LiteralPath $source -Destination $payloadRoot -Recurse -Force }
