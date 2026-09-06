@@ -1,1 +1,12 @@
 /* The simple timeline interface is styled in style.css. */
+
+/* Palette premium Podcast Cut, sans modifier la disposition existante. */
+:root{--bg:#0f1118;--card:#191d29;--inner:#121620;--edge:#2b3344;--text:#f5f7fb;--muted:#8f9ab0;--green:#63e6be;--blue:#79a8ff;--violet:#9d8cff}
+body{background:radial-gradient(900px 500px at 20% -10%,#242145 0,#0f1118 55%);color:var(--text)}
+.app-screen{background:linear-gradient(180deg,#151a25 0,#0f1118 45%)}
+.settings,.tracks,.advanced{background:linear-gradient(145deg,#1b202d,#151a25);border-color:#2c3547;box-shadow:0 12px 30px #06081155}
+.video-row,.advanced-card{background:#121722;border-color:#2d374a}
+.preset select,.preset button,select,input{background:#111621;border-color:#30394d}
+.preset .primary,.primary{background:linear-gradient(100deg,#9c8cff,#61e7bf);color:#101421;box-shadow:0 8px 25px #8c7eff3d}
+.chip{background:#1b2130;color:#77839a;border-color:transparent}.chip.active{background:#203d3b;border-color:#3ea98d;color:#73f0c9}
+.eyebrow{color:#a99cff}.info{color:#8ca5d8}.back-button{background:#171c28;border-color:#30394d;color:#bbc6da}
